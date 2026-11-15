@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     products: Product;
+    articles: Article;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -95,11 +97,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     settings: Setting;
+    homepage: Homepage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -163,6 +167,11 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
+  /**
+   * Stable key used by seed scripts for idempotent upserts.
+   */
+  seedKey?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -283,7 +292,26 @@ export interface ProductShowcaseBlock {
 export interface Product {
   id: number;
   title: string;
+  tagline: string;
   summary: string;
+  category: string;
+  availability: 'available' | 'beta' | 'planned';
+  /**
+   * Hex color used for product accent, e.g. #bb252d
+   */
+  accentColor: string;
+  features?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  logo?: (number | null) | Media;
+  poster: number | Media;
+  demoVideo?: (number | null) | Media;
+  /**
+   * Legacy field. Prefer poster for product demos.
+   */
   featuredImage?: (number | null) | Media;
   description?: {
     root: {
@@ -352,6 +380,46 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  excerpt: string;
+  category: 'engineering' | 'guide' | 'update' | 'case-study';
+  /**
+   * Editorial card palette. Semantic tokens only — not freeform HEX.
+   */
+  cardTheme: 'red' | 'blue' | 'forest' | 'iris' | 'petrol' | 'orange';
+  cover: number | Media;
+  relatedProducts?: (number | Product)[] | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -389,6 +457,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -462,6 +534,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  seedKey?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -625,7 +699,20 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  tagline?: T;
   summary?: T;
+  category?: T;
+  availability?: T;
+  accentColor?: T;
+  features?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  logo?: T;
+  poster?: T;
+  demoVideo?: T;
   featuredImage?: T;
   description?: T;
   layout?:
@@ -644,6 +731,25 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  excerpt?: T;
+  category?: T;
+  cardTheme?: T;
+  cover?: T;
+  relatedProducts?: T;
+  content?: T;
   publishedAt?: T;
   generateSlug?: T;
   slug?: T;
@@ -739,6 +845,92 @@ export interface Setting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  hero: {
+    eyebrow?: string | null;
+    heading: string;
+    subheading: string;
+    links?:
+      | {
+          label: string;
+          url: string;
+          appearance?: ('primary' | 'secondary') | null;
+          id?: string | null;
+        }[]
+      | null;
+    demoEnabled?: boolean | null;
+    gridEnabled?: boolean | null;
+    interactiveBackgroundEnabled?: boolean | null;
+    demoDarkImage?: (number | null) | Media;
+    demoLightImage?: (number | null) | Media;
+    demoDarkVideo?: (number | null) | Media;
+    demoLightVideo?: (number | null) | Media;
+  };
+  /**
+   * Order of slides in the featured product carousel.
+   */
+  featuredProducts: (number | Product)[];
+  productShowcase: {
+    eyebrow?: string | null;
+    title: string;
+    description?: string | null;
+  };
+  platform: {
+    eyebrow?: string | null;
+    title: string;
+    description?: string | null;
+    ctaLabel?: string | null;
+    ctaUrl?: string | null;
+    items?:
+      | {
+          icon: 'account' | 'organizations' | 'integrations' | 'access';
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  ecosystem: {
+    eyebrow?: string | null;
+    title: string;
+    description?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  articlesSection: {
+    eyebrow?: string | null;
+    title: string;
+    description?: string | null;
+  };
+  /**
+   * Up to 4 editorial cards. Leave empty to show the latest published articles.
+   */
+  featuredArticles?: (number | Article)[] | null;
+  finalCta: {
+    heading: string;
+    description?: string | null;
+    links?:
+      | {
+          label: string;
+          url: string;
+          appearance?: ('primary' | 'secondary') | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -779,6 +971,98 @@ export interface SettingsSelect<T extends boolean = true> {
   siteName?: T;
   siteDescription?: T;
   defaultOgImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        subheading?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              appearance?: T;
+              id?: T;
+            };
+        demoEnabled?: T;
+        gridEnabled?: T;
+        interactiveBackgroundEnabled?: T;
+        demoDarkImage?: T;
+        demoLightImage?: T;
+        demoDarkVideo?: T;
+        demoLightVideo?: T;
+      };
+  featuredProducts?: T;
+  productShowcase?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+      };
+  platform?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        ctaLabel?: T;
+        ctaUrl?: T;
+        items?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  ecosystem?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  articlesSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+      };
+  featuredArticles?: T;
+  finalCta?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              appearance?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

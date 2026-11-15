@@ -1,0 +1,138 @@
+.product-carousel {
+  --carousel-nav-size: 3rem;
+}
+
+.product-carousel__nav {
+  display: none;
+  position: absolute;
+  top: 42%;
+  z-index: 2;
+  height: var(--carousel-nav-size);
+  width: var(--carousel-nav-size);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--foreground);
+  transition:
+    background-color var(--motion-ui) var(--ease-standard),
+    opacity var(--motion-ui) var(--ease-standard),
+    border-color var(--motion-ui) var(--ease-standard);
+}
+
+.product-carousel__nav:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--foreground) 8%, var(--surface));
+  border-color: color-mix(in srgb, var(--foreground) 35%, var(--border));
+}
+
+.product-carousel__nav:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.product-carousel__nav--prev {
+  left: 0;
+  transform: translate(-30%, -50%);
+}
+
+.product-carousel__nav--next {
+  right: 0;
+  transform: translate(30%, -50%);
+}
+
+.product-carousel__nav--prev:active:not(:disabled) {
+  transform: translate(-30%, -50%) scale(0.96);
+}
+
+.product-carousel__nav--next:active:not(:disabled) {
+  transform: translate(30%, -50%) scale(0.96);
+}
+
+.product-carousel__viewport {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 640px) {
+  .product-carousel__viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-carousel__nav {
+    display: inline-flex;
+  }
+
+  .product-carousel__viewport {
+    margin-inline: calc(var(--carousel-nav-size) + 0.75rem);
+  }
+}
+
+.product-slide {
+  height: 100%;
+  transform: scale(0.85);
+  opacity: 0.35;
+  transform-origin: center center;
+  transition:
+    transform var(--motion-stage) var(--ease-emphasized),
+    opacity 300ms ease,
+    filter var(--motion-stage) var(--ease-emphasized);
+  cursor: pointer;
+}
+
+.product-slide--near {
+  transform: scale(0.91);
+  opacity: 0.65;
+}
+
+.product-slide--active {
+  transform: scale(1);
+  opacity: 1;
+  cursor: default;
+}
+
+.product-slide--active :is(article) {
+  border-color: color-mix(in srgb, var(--foreground) 28%, var(--border));
+  box-shadow: var(--shadow-soft);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-slide:not(.product-slide--active):hover {
+    transform: scale(0.94);
+    opacity: 0.8;
+  }
+
+  .product-slide--active:hover :is(article) {
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  }
+
+  .product-slide--active:hover img {
+    transform: scale(1.03);
+  }
+}
+
+.product-slide img {
+  transition: transform var(--motion-stage) var(--ease-emphasized);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-slide,
+  .product-slide img {
+    transition: none;
+  }
+}

@@ -1,18 +1,25 @@
 import Link from "next/link";
-import React from "react";
 
-import type { Footer as FooterType } from "@/payload-types";
 import { Container } from "@/components/ui/Container";
+import type { Footer as FooterType } from "@/payload-types";
 
-export function Footer({ data }: { data: FooterType }) {
+type Props = {
+  data: FooterType;
+};
+
+export function Footer({ data }: Props) {
   return (
-    <footer className="site-footer">
+    <footer className="border-t border-[var(--border)] py-10">
       <Container>
-        <div className="site-footer__inner">
-          <p>{data.copyright}</p>
-          <nav className="site-footer__nav" aria-label="Footer">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-[var(--muted)]">{data.copyright}</p>
+          <nav aria-label="Footer" className="flex flex-wrap gap-5">
             {(data.navItems || []).map((item, index) => (
-              <Link key={`${item.url}-${index}`} href={item.url}>
+              <Link
+                key={`${item.url}-${index}`}
+                href={item.url}
+                className="text-sm text-[var(--muted)] transition-colors duration-[var(--motion-micro)] hover:text-[var(--foreground)]"
+              >
                 {item.label}
               </Link>
             ))}

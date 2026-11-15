@@ -1,17 +1,21 @@
 @import "tailwindcss";
-
-:root {
-  --dios-canvas: #222222;
-  --dios-sidebar: #1c1c1c;
-  --dios-surface: #2e2e2e;
-  --dios-action: #bb252d;
-  --dios-text: #fafaf7;
-}
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/motion.css";
+@import "./tokens/surfaces.css";
+@import "./tokens/carousel.css";
+@import "./tokens/articles.css";
 
 @theme inline {
-  --color-canvas: var(--dios-canvas);
-  --color-surface: var(--dios-surface);
-  --color-action: var(--dios-action);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --font-sans: var(--font-body);
 }
 
 html {
@@ -19,12 +23,65 @@ html {
 }
 
 body {
-  background: var(--dios-canvas);
-  color: var(--dios-text);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border) 70%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.55;
+}
+
+.hero-demo video {
+  object-fit: cover;
+  object-position: top center;
+}
+
+@supports not ((backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))) {
+  .glass {
+    background: var(--surface);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--surface);
+    backdrop-filter: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }

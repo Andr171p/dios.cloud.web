@@ -12,7 +12,7 @@ export const Header: GlobalConfig = {
     {
       name: "logoText",
       type: "text",
-      defaultValue: "Dios Cloud",
+      defaultValue: "DIOS",
     },
     {
       name: "navItems",

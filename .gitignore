@@ -22,6 +22,8 @@
 # misc
 .DS_Store
 *.pem
+/tmp/
+/Rec *.mp4
 
 # debug
 npm-debug.log*
@@ -48,3 +50,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local source motion dumps (served copies live in public/demos)
+/motion-*.mp4
+

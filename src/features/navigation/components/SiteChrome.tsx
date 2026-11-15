@@ -1,15 +1,15 @@
-import React from "react";
+import type { ReactNode } from "react";
 
 import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import { getFooter, getHeader } from "@/features/navigation/queries";
 
-export async function SiteChrome({ children }: { children: React.ReactNode }) {
+export async function SiteChrome({ children }: { children: ReactNode }) {
   const [header, footer] = await Promise.all([getHeader(), getFooter()]);
 
   return (
     <>
-      <Header data={header} />
+      <SiteHeader data={header} />
       <main>{children}</main>
       <Footer data={footer} />
     </>

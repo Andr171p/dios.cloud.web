@@ -12,7 +12,7 @@ export const Footer: GlobalConfig = {
     {
       name: "copyright",
       type: "text",
-      defaultValue: "© Dios Cloud. All rights reserved.",
+      defaultValue: "© DIOS. Все права защищены.",
     },
     {
       name: "navItems",

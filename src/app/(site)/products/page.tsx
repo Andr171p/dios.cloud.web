@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ProductCard } from "@/features/products/components/ProductCard";
-import { toProductCard } from "@/features/products/mappers";
+import { toProductCardModel } from "@/features/products/mappers";
 import { getPublishedProducts } from "@/features/products/queries";
 import { buildMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 
 export default async function ProductsPage() {
   const products = await getPublishedProducts();
-  const cards = products.map(toProductCard);
+  const cards = products.map(toProductCardModel);
 
   return (
     <section className="block">

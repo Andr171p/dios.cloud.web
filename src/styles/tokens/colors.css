@@ -1,0 +1,55 @@
+:root {
+  color-scheme: light;
+
+  --background: #f6f5f2;
+  --surface: #ffffff;
+  --surface-muted: #efeee9;
+  --foreground: #222222;
+  --muted: #666666;
+  --border: #deddd9;
+  --accent: #bb252d;
+  --accent-hover: #a71e26;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --focus-ring: color-mix(in srgb, var(--accent) 55%, white);
+  --overlay: color-mix(in srgb, var(--foreground) 4%, transparent);
+  --glass: color-mix(in srgb, var(--surface) 72%, transparent);
+  --glass-border: color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #222222;
+  --surface: #2e2e2e;
+  --surface-muted: #262626;
+  --foreground: #fafaf7;
+  --muted: #bcbcbc;
+  --border: #414141;
+  --accent: #bb252d;
+  --accent-hover: #d35b62;
+  --accent-soft: color-mix(in srgb, var(--accent) 18%, transparent);
+  --focus-ring: color-mix(in srgb, var(--accent) 65%, black);
+  --overlay: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --glass: color-mix(in srgb, var(--surface) 68%, transparent);
+  --glass-border: color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --background: #222222;
+    --surface: #2e2e2e;
+    --surface-muted: #262626;
+    --foreground: #fafaf7;
+    --muted: #bcbcbc;
+    --border: #414141;
+    --accent: #bb252d;
+    --accent-hover: #d35b62;
+    --accent-soft: color-mix(in srgb, var(--accent) 18%, transparent);
+    --focus-ring: color-mix(in srgb, var(--accent) 65%, black);
+    --overlay: color-mix(in srgb, var(--foreground) 6%, transparent);
+    --glass: color-mix(in srgb, var(--surface) 68%, transparent);
+    --glass-border: color-mix(in srgb, var(--border) 70%, transparent);
+  }
+}

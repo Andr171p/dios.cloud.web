@@ -13,12 +13,12 @@ export const Settings: GlobalConfig = {
       name: "siteName",
       type: "text",
       required: true,
-      defaultValue: "Dios Cloud",
+      defaultValue: "DIOS",
     },
     {
       name: "siteDescription",
       type: "textarea",
-      defaultValue: "Cloud infrastructure and products by Dios.",
+      defaultValue: "Сервисные процессы и ИИ-инструменты для вашей команды.",
     },
     {
       name: "defaultOgImage",

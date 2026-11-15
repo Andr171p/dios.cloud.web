@@ -16,6 +16,29 @@ services:
       timeout: 5s
       retries: 10
 
+  rustfs:
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      RUSTFS_ACCESS_KEY: rustfsadmin
+      RUSTFS_SECRET_KEY: rustfsadmin
+      RUSTFS_ADDRESS: ":9000"
+      RUSTFS_CONSOLE_ADDRESS: ":9001"
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_OBS_LOGGER_LEVEL: error
+    command: ["/data"]
+    volumes:
+      - rustfs_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
   payload:
     image: node:22.23.5-alpine
     ports:
@@ -28,11 +51,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rustfs:
+        condition: service_started
     env_file:
       - .env
     environment:
       DATABASE_URL: postgres://postgres:dev@postgres:5432/dios-cloud-web
+      S3_ENDPOINT: http://rustfs:9000
 
 volumes:
   pgdata:
   node_modules:
+  rustfs_data:

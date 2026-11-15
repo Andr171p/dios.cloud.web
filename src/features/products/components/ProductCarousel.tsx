@@ -1,30 +1,53 @@
-'use client';
+"use client";
 
-import {useCallback, useEffect, useState} from 'react'
-import useEmblaCarousel from 'embla-carousel-react';
+import useEmblaCarousel from "embla-carousel-react";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ProductCard } from "./ProductCard";
-import type { Product } from "../types";
-
+import type { ProductCardModel } from "../types";
 
 type Props = {
-  products: readonly Product[];
+  products: readonly ProductCardModel[];
 };
 
-export function ProductCarousel({products}: Props) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    containScroll: "trimSnaps",
-    loop: false,
-  });
+function startIndexFor(count: number) {
+  if (count <= 1) return 0;
+  return Math.floor((count - 1) / 2);
+}
 
+function distanceClass(distance: number, active: boolean) {
+  if (active) return "product-slide product-slide--active";
+  if (distance === 1) return "product-slide product-slide--near";
+  return "product-slide product-slide--far";
+}
+
+export function ProductCarousel({ products }: Props) {
+  const count = products.length;
+  const initialIndex = startIndexFor(count);
+
+  const plugins = useMemo(() => [WheelGesturesPlugin({ forceWheelAxis: "x" })], []);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      align: "center",
+      containScroll: false,
+      loop: false,
+      skipSnaps: false,
+      startIndex: initialIndex,
+      watchDrag: count > 1,
+    },
+    count > 1 ? plugins : undefined,
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
 
-  const updateButtons = useCallback(() =>{
+  const sync = useCallback(() => {
     if (!emblaApi) return;
-
+    setSelectedIndex(emblaApi.selectedScrollSnap());
     setCanPrev(emblaApi.canScrollPrev());
     setCanNext(emblaApi.canScrollNext());
   }, [emblaApi]);
@@ -32,52 +55,122 @@ export function ProductCarousel({products}: Props) {
   useEffect(() => {
     if (!emblaApi) return;
 
-    emblaApi.on("init", updateButtons);
-    emblaApi.on("select", updateButtons);
-    emblaApi.on("reInit", updateButtons);
+    sync();
+    emblaApi.on("select", sync);
+    emblaApi.on("reInit", sync);
 
     return () => {
-      emblaApi.off("init", updateButtons);
-      emblaApi.off("select", updateButtons);
-      emblaApi.off("reInit", updateButtons);
+      emblaApi.off("select", sync);
+      emblaApi.off("reInit", sync);
     };
-  }, [emblaApi, updateButtons]);
+  }, [emblaApi, sync]);
+
+  useEffect(() => {
+    if (!emblaApi || count <= 1) return;
+
+    const root = emblaApi.rootNode();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        emblaApi.scrollPrev();
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        emblaApi.scrollNext();
+      }
+    };
+
+    root.addEventListener("keydown", onKeyDown);
+    return () => root.removeEventListener("keydown", onKeyDown);
+  }, [emblaApi, count]);
+
+  if (count === 0) return null;
+
+  if (count === 1) {
+    const product = products[0];
+    if (!product) return null;
+
+    return (
+      <div className="mx-auto max-w-4xl">
+        <ProductCard product={product} active />
+      </div>
+    );
+  }
 
   return (
-    <div className="relative">
-      <div ref={emblaRef} className="overflow-hidden">
-        <div className="-ml-5 flex touch-pan-y">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="min-w-0 flex-[0_0_90%] pl-5 md:flex-[0_0_65%] lg:flex-[0_0_50%]"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
+    <div
+      className="product-carousel relative"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Продукты DIOS"
+    >
+      <button
+        type="button"
+        aria-label="Предыдущий продукт"
+        onClick={() => emblaApi?.scrollPrev()}
+        disabled={!canPrev}
+        className="product-carousel__nav product-carousel__nav--prev"
+      >
+        <ArrowLeft size={20} />
+      </button>
+
+      <div
+        ref={emblaRef}
+        className="product-carousel__viewport overflow-hidden outline-none"
+        tabIndex={0}
+      >
+        <div className="flex touch-pan-y">
+          {products.map((product, index) => {
+            const active = index === selectedIndex;
+            const distance = Math.abs(index - selectedIndex);
+
+            return (
+              <div
+                key={product.id}
+                className="product-carousel__slide min-w-0 shrink-0 grow-0 basis-[86%] px-3 sm:basis-[78%] md:basis-[70%] lg:basis-[62%]"
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} из ${count}: ${product.name}`}
+                aria-current={active ? "true" : undefined}
+              >
+                <div
+                  className={distanceClass(distance, active)}
+                  data-active={active}
+                  onClick={() => {
+                    if (!active) emblaApi?.scrollTo(index);
+                  }}
+                  onKeyDown={(event) => {
+                    if (!active && (event.key === "Enter" || event.key === " ")) {
+                      event.preventDefault();
+                      emblaApi?.scrollTo(index);
+                    }
+                  }}
+                  role={active ? undefined : "button"}
+                  tabIndex={active ? undefined : 0}
+                >
+                  <ProductCard product={product} active={active} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="mt-8 flex justify-end gap-3">
-        <button
-          type="button"
-          aria-label="Предыдущие продукты"
-          onClick={() => emblaApi?.scrollPrev()}
-          disabled={!canPrev}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
-        >
-          <ArrowLeft size={20} />
-        </button>
+      <button
+        type="button"
+        aria-label="Следующий продукт"
+        onClick={() => emblaApi?.scrollNext()}
+        disabled={!canNext}
+        className="product-carousel__nav product-carousel__nav--next"
+      >
+        <ArrowRight size={20} />
+      </button>
 
-        <button
-          type="button"
-          aria-label="Следующие продукты"
-          onClick={() => emblaApi?.scrollNext()}
-          disabled={!canNext}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
-        >
-          <ArrowRight size={20} />
-        </button>
+      <div className="mt-8 flex items-center justify-center gap-3">
+        <p className="text-sm text-[var(--muted)]" aria-live="polite">
+          {selectedIndex + 1} / {count}
+        </p>
       </div>
     </div>
   );

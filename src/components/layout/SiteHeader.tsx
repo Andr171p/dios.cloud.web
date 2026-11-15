@@ -1,43 +1,52 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import {Container} from '@/components/ui/Container';
+import { DiosMark } from "@/components/brand/DiosMark";
+import { ThemeSwitcher } from "@/components/navigation/ThemeSwitcher";
+import { Container } from "@/components/ui/Container";
+import type { Header as HeaderType } from "@/payload-types";
 
-const navigation = [
-  { label: "Продукты", href: "/#products" },
-  { label: "Платформа", href: "/#platform" },
-] as const;
+type Props = {
+  data: HeaderType;
+};
 
-export function SiteHeader() {
+export function SiteHeader({ data }: Props) {
   return (
-    <header className="relative z-20 border-b border-white/10">
+    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--glass)] backdrop-blur-xl">
       <Container>
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-[var(--header-height)] items-center justify-between gap-6">
           <Link
             href="/"
-            className="text-2xl font-bold tracking-[-0.06em]"
+            className="inline-flex items-center gap-3 font-[family-name:var(--font-display)] text-xl font-bold tracking-[var(--tracking-display)] transition-opacity duration-[var(--motion-micro)] hover:opacity-80"
             aria-label="DIOS — главная"
           >
-            DIOS<span className="text-[#bb252d]">.</span>
+            <DiosMark priority />
+            <span>
+              {data.logoText || "DIOS"}
+              <span className="text-[var(--accent)]">.</span>
+            </span>
           </Link>
 
-          <nav aria-label="Основная навигация" className="hidden items-center gap-9 md:flex">
-            {navigation.map((item) => (
+          <nav aria-label="Основная навигация" className="hidden items-center gap-8 md:flex">
+            {(data.navItems || []).map((item, index) => (
               <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-white/65 transition-colors hover:text-white"
+                key={`${item.url}-${index}`}
+                href={item.url}
+                className="text-sm text-[var(--muted)] transition-colors duration-[var(--motion-micro)] hover:text-[var(--foreground)]"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <Link
-            href='/admin'
-            className='rounded-lg border border-white/15 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-white/10'
-          >
-            Войти
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeSwitcher />
+            <Link
+              href="/admin"
+              className="rounded-full border border-[var(--border)] px-4 py-2.5 text-sm font-medium transition-[background-color,border-color,color] duration-[var(--motion-ui)] hover:border-[color-mix(in_srgb,var(--foreground)_40%,var(--border))] hover:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)]"
+            >
+              Войти
+            </Link>
+          </div>
         </div>
       </Container>
     </header>

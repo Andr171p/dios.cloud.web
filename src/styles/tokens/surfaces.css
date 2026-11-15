@@ -1,0 +1,8 @@
+:root {
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --shadow-soft: 0 18px 40px color-mix(in srgb, var(--foreground) 8%, transparent);
+  --header-height: 5rem;
+}

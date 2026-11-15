@@ -17,9 +17,19 @@ export const Media: CollectionConfig = {
       type: "text",
       required: true,
     },
+    {
+      name: "seedKey",
+      type: "text",
+      unique: true,
+      index: true,
+      admin: {
+        description: "Stable key used by seed scripts for idempotent upserts.",
+        position: "sidebar",
+      },
+    },
   ],
   upload: {
-    mimeTypes: ["image/*"],
+    mimeTypes: ["image/*", "video/mp4", "video/webm"],
     imageSizes: [
       {
         name: "thumbnail",
