@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --dios-canvas: #222222;
+  --dios-sidebar: #1c1c1c;
+  --dios-surface: #2e2e2e;
+  --dios-action: #bb252d;
+  --dios-text: #fafaf7;
+}
+
+@theme inline {
+  --color-canvas: var(--dios-canvas);
+  --color-surface: var(--dios-surface);
+  --color-action: var(--dios-action);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--dios-canvas);
+  color: var(--dios-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
