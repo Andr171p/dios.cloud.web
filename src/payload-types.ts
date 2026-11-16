@@ -72,6 +72,7 @@ export interface Config {
     pages: Page;
     products: Product;
     articles: Article;
+    organizations: Organization;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -419,6 +421,43 @@ export interface Article {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Public marketing profiles for partners and customers shown on the homepage logo marquee. Not IAM tenants.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organizations".
+ */
+export interface Organization {
+  id: number;
+  name: string;
+  relationship: 'customer' | 'partner' | 'integration';
+  /**
+   * Monochrome logo for light theme (dark ink, transparent background).
+   */
+  logoLight: number | Media;
+  /**
+   * Monochrome logo for dark theme (light ink, transparent background).
+   */
+  logoDark: number | Media;
+  website?: string | null;
+  /**
+   * Show on homepage logo marquee.
+   */
+  featured?: boolean | null;
+  sortOrder?: number | null;
+  /**
+   * Only approved logos may appear publicly.
+   */
+  approvedForPublication: boolean;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -461,6 +500,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'organizations';
+        value: number | Organization;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -751,6 +794,25 @@ export interface ArticlesSelect<T extends boolean = true> {
   relatedProducts?: T;
   content?: T;
   publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organizations_select".
+ */
+export interface OrganizationsSelect<T extends boolean = true> {
+  name?: T;
+  relationship?: T;
+  logoLight?: T;
+  logoDark?: T;
+  website?: T;
+  featured?: T;
+  sortOrder?: T;
+  approvedForPublication?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;

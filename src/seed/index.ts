@@ -8,6 +8,7 @@ import { seedArticles } from "./articles";
 import { seedHomepage } from "./homepage";
 import { seedMedia } from "./media";
 import { seedNavigation } from "./navigation";
+import { seedOrganizations } from "./organizations";
 import { seedProducts } from "./products";
 import { ensureS3Bucket } from "./utils";
 
@@ -22,6 +23,7 @@ async function main() {
   const media = await seedMedia(payload);
   const products = await seedProducts(payload, media);
   const articles = await seedArticles(payload, media);
+  await seedOrganizations(payload);
   await seedHomepage(payload, products, articles);
   await seedNavigation(payload);
 

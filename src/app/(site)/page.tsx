@@ -3,11 +3,14 @@ import { getLatestArticles } from "@/features/articles/queries";
 import { HomePageView } from "@/features/home/components/HomePage";
 import { toHomePageViewModel } from "@/features/home/mappers";
 import { getHomepage } from "@/features/home/queries";
+import { toMarqueeLogo } from "@/features/organizations/mappers";
+import { getFeaturedOrganizations } from "@/features/organizations/queries";
 
 export default async function HomePage() {
-  const [homepage, latestArticles] = await Promise.all([
+  const [homepage, latestArticles, organizations] = await Promise.all([
     getHomepage(),
     getLatestArticles(4),
+    getFeaturedOrganizations(12),
   ]);
 
   if (!homepage.hero?.heading || !(homepage.featuredProducts?.length > 0)) {
@@ -23,5 +26,9 @@ export default async function HomePage() {
   }
 
   const content = toHomePageViewModel(homepage, latestArticles);
-  return <HomePageView content={content} />;
+  const partnerLogos = organizations
+    .map(toMarqueeLogo)
+    .filter((logo): logo is NonNullable<typeof logo> => Boolean(logo));
+
+  return <HomePageView content={content} partnerLogos={partnerLogos} />;
 }

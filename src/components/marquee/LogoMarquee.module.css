@@ -1,0 +1,122 @@
+.viewport {
+  --logo-gap: clamp(3rem, 6vw, 7rem);
+  --marquee-distance: 50%;
+  --marquee-duration: 50s;
+
+  width: 100%;
+  overflow: hidden;
+  /* Mask stays on a static layer so it doesn't repaint with every transform frame */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  animation: marquee var(--marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+.trackPaused {
+  animation: none;
+  width: 100%;
+  justify-content: center;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--logo-gap);
+  flex: 0 0 auto;
+  padding-right: var(--logo-gap);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: clamp(7.5rem, 12vw, 11rem);
+  height: 5.5rem;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 56px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 200ms ease;
+  /* Avoid paint work during scroll */
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo:hover .image {
+    opacity: 1;
+  }
+
+  .viewport:hover .track:not(.trackPaused) {
+    animation-play-state: paused;
+  }
+}
+
+.viewport:focus-within .track:not(.trackPaused) {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-1 * var(--marquee-distance)), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    will-change: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    row-gap: 1.5rem;
+    transform: none;
+  }
+
+  .group {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 0;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .group:nth-child(2) {
+    display: none;
+  }
+
+  .viewport {
+    overflow-x: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

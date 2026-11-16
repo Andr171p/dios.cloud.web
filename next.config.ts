@@ -32,6 +32,9 @@ const nextConfig: NextConfig = {
       {
         pathname: "/demos/**",
       },
+      {
+        pathname: "/partners/**",
+      },
     ],
     remotePatterns: [
       {

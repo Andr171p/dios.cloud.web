@@ -5,11 +5,12 @@
 ## Порядок секций
 
 1. Hero — центрированный: eyebrow, заголовок, подзаголовок, 2 CTA, demo frame  
-2. Focused Product Carousel — заголовок по центру, карточки по Embla  
-3. Platform Capabilities — слева, 4 колонки без card-контейнеров  
-4. Connected Ecosystem — слева  
-5. Articles & Insights — слева, редакционные обложки  
-6. Final CTA — по центру  
+2. Logo Marquee — партнёры и заказчики (CSS infinite track)  
+3. Focused Product Carousel — заголовок по центру, карточки по Embla  
+4. Platform Capabilities — слева, 4 колонки без card-контейнеров  
+5. Connected Ecosystem — слева  
+6. Articles & Insights — editorial rail  
+7. Final CTA — по центру  
 
 ## Hero
 
@@ -42,6 +43,7 @@ CMS-поля `Homepage.hero`: текст, CTA, флаги `demoEnabled` / `gridE
 |----------|------------|
 | `Products` | Продуктовая витрина |
 | `Articles` | Материалы: engineering / guide / update / case-study + `cardTheme` |
+| `Organizations` | Публичные партнёры/заказчики для Logo Marquee (не IAM) |
 | `Homepage` | Hero (в т.ч. theme-aware demo) + слоты секций + featured |
 | `Media` | Обложки, poster, video; `seedKey` для seed |
 

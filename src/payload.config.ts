@@ -8,6 +8,7 @@ import sharp from "sharp";
 
 import { Articles } from "./cms/collections/Articles";
 import { Media } from "./cms/collections/Media";
+import { Organizations } from "./cms/collections/Organizations";
 import { Pages } from "./cms/collections/Pages";
 import { Products } from "./cms/collections/Products";
 import { Users } from "./cms/collections/Users";
@@ -54,7 +55,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Pages, Products, Articles],
+  collections: [Users, Media, Pages, Products, Articles, Organizations],
   globals: [Header, Footer, Settings, Homepage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
