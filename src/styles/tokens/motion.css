@@ -3,6 +3,7 @@
   --motion-ui: 220ms;
   --motion-stage: 400ms;
   --motion-editorial: 560ms;
+  --motion-odometer: 1280ms;
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -13,5 +14,6 @@
     --motion-ui: 1ms;
     --motion-stage: 1ms;
     --motion-editorial: 1ms;
+    --motion-odometer: 1ms;
   }
 }

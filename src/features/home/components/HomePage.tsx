@@ -1,5 +1,6 @@
 import type { MarqueeLogo } from "@/components/marquee/LogoMarquee";
 
+import { AiMetricsSection } from "./AiMetricsSection";
 import { ArticlesSection } from "./ArticlesSection";
 import { ConnectedEcosystem } from "./ConnectedEcosystem";
 import { FeaturedProductsSection } from "./FeaturedProductsSection";
@@ -24,6 +25,7 @@ export function HomePageView({ content, partnerLogos = [] }: Props) {
         products={content.featuredProducts}
       />
       <PlatformCapabilities content={content.platform} />
+      <AiMetricsSection />
       <ConnectedEcosystem content={content.ecosystem} />
       <ArticlesSection content={content.articlesSection} articles={content.articles} />
       <FinalCta content={content.finalCta} />

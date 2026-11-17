@@ -14,6 +14,14 @@
   --overlay: color-mix(in srgb, var(--foreground) 4%, transparent);
   --glass: color-mix(in srgb, var(--surface) 72%, transparent);
   --glass-border: color-mix(in srgb, var(--border) 80%, transparent);
+
+  /* Inverse surface: light page → dark chapter */
+  --inverse-background: #1c1c1c;
+  --inverse-surface: #262626;
+  --inverse-foreground: #fafaf7;
+  --inverse-muted: #bcbcbc;
+  --inverse-border: #3e3e3e;
+  --inverse-accent: #d35b62;
 }
 
 [data-theme="dark"] {
@@ -32,6 +40,14 @@
   --overlay: color-mix(in srgb, var(--foreground) 6%, transparent);
   --glass: color-mix(in srgb, var(--surface) 68%, transparent);
   --glass-border: color-mix(in srgb, var(--border) 70%, transparent);
+
+  /* Inverse surface: dark page → light chapter */
+  --inverse-background: #f6f5f2;
+  --inverse-surface: #ffffff;
+  --inverse-foreground: #222222;
+  --inverse-muted: #666666;
+  --inverse-border: #deddd9;
+  --inverse-accent: #bb252d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,5 +67,12 @@
     --overlay: color-mix(in srgb, var(--foreground) 6%, transparent);
     --glass: color-mix(in srgb, var(--surface) 68%, transparent);
     --glass-border: color-mix(in srgb, var(--border) 70%, transparent);
+
+    --inverse-background: #f6f5f2;
+    --inverse-surface: #ffffff;
+    --inverse-foreground: #222222;
+    --inverse-muted: #666666;
+    --inverse-border: #deddd9;
+    --inverse-accent: #bb252d;
   }
 }

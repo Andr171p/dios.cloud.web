@@ -1,0 +1,334 @@
+.root {
+  position: relative;
+  width: 100%;
+  min-height: 18rem;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  margin-right: calc(-1 * clamp(0px, 4vw, 2.5rem));
+  overflow: hidden;
+}
+
+.svg {
+  display: block;
+  width: 118%;
+  max-width: none;
+  height: auto;
+  overflow: visible;
+}
+
+.connection {
+  fill: none;
+  stroke: var(--inverse-foreground);
+  stroke-width: 1.35;
+  stroke-opacity: 0.22;
+  stroke-dasharray: 2.2 5.5;
+  stroke-linecap: round;
+  transition: stroke-opacity 280ms var(--ease-standard);
+}
+
+.connectionLocal {
+  stroke-opacity: 0.14;
+  stroke-dasharray: 1.5 7;
+}
+
+.connectionAction {
+  stroke-opacity: 0.14;
+}
+
+.connectionModel {
+  stroke: color-mix(in srgb, #5b8def 70%, var(--inverse-foreground));
+  stroke-opacity: 0.18;
+  stroke-dasharray: 1.5 7;
+}
+
+.connectionActive {
+  stroke-opacity: 0.58;
+}
+
+.connectionLocal.connectionActive {
+  stroke-opacity: 0.42;
+}
+
+.signal {
+  fill: none;
+  stroke: var(--inverse-accent);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-dasharray: 5 95;
+  stroke-opacity: 0;
+  pointer-events: none;
+}
+
+.signalContext {
+  stroke: color-mix(in srgb, var(--inverse-foreground) 80%, var(--inverse-accent));
+}
+
+.signalAction {
+  stroke: var(--inverse-accent);
+  stroke-width: 3.1;
+}
+
+.signalModel {
+  stroke: #6ea0ff;
+  stroke-width: 2.6;
+}
+
+.signalActive {
+  stroke-opacity: 1;
+  animation: signal-travel var(--signal-duration, 2.2s) var(--ease-emphasized) both;
+}
+
+@keyframes signal-travel {
+  from {
+    stroke-dashoffset: 0;
+    stroke-opacity: 0;
+  }
+
+  12% {
+    stroke-opacity: 1;
+  }
+
+  82% {
+    stroke-opacity: 1;
+  }
+
+  to {
+    stroke-dashoffset: -100;
+    stroke-opacity: 0;
+  }
+}
+
+.node {
+  transition:
+    opacity 240ms var(--ease-standard),
+    filter 240ms var(--ease-standard);
+}
+
+.nodeDimmed {
+  opacity: 0.5;
+}
+
+.nodeActive {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--inverse-accent) 35%, transparent));
+}
+
+.markCircle {
+  fill: var(--inverse-surface);
+  stroke: var(--inverse-border);
+  stroke-width: 1.5;
+}
+
+.markCircleHub {
+  fill: color-mix(in srgb, var(--inverse-surface) 88%, var(--inverse-accent));
+  stroke: color-mix(in srgb, var(--inverse-border) 55%, var(--inverse-accent));
+  stroke-width: 1.75;
+}
+
+.markCircleModel {
+  fill: color-mix(in srgb, var(--inverse-surface) 85%, #5b8def);
+  stroke: color-mix(in srgb, var(--inverse-border) 55%, #5b8def);
+}
+
+.markCircleIntegration {
+  fill: #111111;
+  stroke: color-mix(in srgb, #111111 70%, var(--inverse-border));
+}
+
+.markCircleProduct {
+  fill: #121212;
+  stroke: color-mix(in srgb, #121212 65%, var(--inverse-border));
+}
+
+.markCircleTool {
+  fill: color-mix(in srgb, var(--inverse-surface) 80%, #d4a017);
+  stroke: color-mix(in srgb, var(--inverse-border) 50%, #d4a017);
+}
+
+.markCirclePerson {
+  fill: color-mix(in srgb, var(--inverse-surface) 88%, var(--inverse-foreground));
+  stroke: var(--inverse-border);
+  stroke-width: 1.5;
+}
+
+.personGlyph {
+  color: var(--inverse-foreground);
+}
+
+.markRing {
+  fill: none;
+  stroke-width: 2;
+  stroke-opacity: 0.95;
+}
+
+.monogram {
+  fill: var(--inverse-foreground);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.monogramOnAccent {
+  fill: #ffffff;
+}
+
+.entityChip {
+  fill: color-mix(in srgb, var(--inverse-surface) 92%, var(--inverse-foreground));
+  stroke: var(--inverse-border);
+  stroke-width: 1;
+}
+
+.entityLabel {
+  fill: var(--inverse-foreground);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.nodeCaption {
+  fill: var(--inverse-muted);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+}
+
+.nodeTitle {
+  fill: var(--inverse-foreground);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.nodeTitleHub {
+  fill: var(--inverse-foreground);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.controls {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  z-index: 2;
+}
+
+.pauseButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--inverse-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--inverse-background) 72%, transparent);
+  color: var(--inverse-muted);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  transition:
+    color var(--motion-micro) var(--ease-standard),
+    border-color var(--motion-micro) var(--ease-standard),
+    background-color var(--motion-micro) var(--ease-standard);
+}
+
+.pauseButton:hover {
+  color: var(--inverse-foreground);
+  border-color: color-mix(in srgb, var(--inverse-foreground) 35%, var(--inverse-border));
+}
+
+.mobileFlow {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.mobileStep {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border: 1px solid var(--inverse-border);
+  border-radius: 999px;
+  background: var(--inverse-surface);
+  padding: 0.7rem 1rem;
+}
+
+.mobileIndex {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--inverse-foreground) 10%, transparent);
+  color: var(--inverse-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.mobileLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.mobileKind {
+  margin-left: auto;
+  color: var(--inverse-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mobileConnector {
+  width: 1px;
+  height: 0.75rem;
+  margin-left: 1.65rem;
+  background: color-mix(in srgb, var(--inverse-foreground) 28%, transparent);
+}
+
+@media (max-width: 899px) {
+  .canvas {
+    display: none;
+  }
+
+  .controls {
+    display: none;
+  }
+
+  .mobileFlow {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal,
+  .signalActive {
+    animation: none !important;
+    stroke-opacity: 0 !important;
+  }
+
+  .connectionActive {
+    stroke-opacity: 0.5;
+  }
+
+  .nodeActive {
+    filter: none;
+  }
+}

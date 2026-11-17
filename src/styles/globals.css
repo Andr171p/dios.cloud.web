@@ -15,6 +15,12 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-inverse-background: var(--inverse-background);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-foreground: var(--inverse-foreground);
+  --color-inverse-muted: var(--inverse-muted);
+  --color-inverse-border: var(--inverse-border);
+  --color-inverse-accent: var(--inverse-accent);
   --font-sans: var(--font-body);
 }
 
