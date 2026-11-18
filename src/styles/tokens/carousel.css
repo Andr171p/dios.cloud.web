@@ -2,6 +2,27 @@
   --carousel-nav-size: 3rem;
 }
 
+/* Soft tonal plate for product marks — readable on light + dark surfaces */
+.product-mark {
+  background: color-mix(in srgb, var(--mark-accent, var(--accent)) 16%, var(--surface));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--mark-accent, var(--accent)) 22%, var(--border));
+}
+
+[data-theme="dark"] .product-mark {
+  background: color-mix(in srgb, var(--mark-accent, var(--accent)) 22%, var(--surface));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--mark-accent, var(--accent)) 28%, var(--border));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .product-mark {
+    background: color-mix(in srgb, var(--mark-accent, var(--accent)) 22%, var(--surface));
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--mark-accent, var(--accent)) 28%, var(--border));
+  }
+}
+
 .product-carousel__nav {
   display: none;
   position: absolute;

@@ -1,5 +1,6 @@
 import React from "react";
 import { cookies } from "next/headers";
+import Script from "next/script";
 
 import { SiteChrome } from "@/features/navigation/components/SiteChrome";
 import { siteConfig } from "@/config/site";
@@ -24,10 +25,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       data-theme={themeAttr}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body className="min-h-screen antialiased">
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

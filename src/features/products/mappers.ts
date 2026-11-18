@@ -1,6 +1,8 @@
 import type { Media, Product } from "@/payload-types";
 import {
   getProductAppUrl,
+  getProductMarkAccent,
+  getProductMarkSrc,
   getProductMarketingUrl,
   getProductRuntime,
 } from "@/config/product-registry";
@@ -42,6 +44,8 @@ export function toProductCardModel(product: Product): ProductCardModel {
     availability: product.availability,
     accentColor: asHex(product.accentColor),
     features: (product.features ?? []).map((feature) => feature.label),
+    markSrc: getProductMarkSrc(product.slug),
+    markAccent: getProductMarkAccent(product.slug),
     posterUrl: demo?.darkPoster ?? mediaUrl(poster),
     posterAlt: mediaAlt(poster, product.title),
     posterUrlLight: demo?.lightPoster ?? null,

@@ -16,6 +16,10 @@ export type ProductCardModel = {
   availability: "available" | "beta" | "planned";
   accentColor: HexColor;
   features: readonly string[];
+  /** Product graphic mark (identity lives in code registry) */
+  markSrc: string | null;
+  /** Soft tonal plate color for the mark */
+  markAccent: HexColor | null;
   posterUrl: string | null;
   posterAlt: string;
   demoVideoUrl: string | null;

@@ -118,6 +118,16 @@ export const graphNodes: GraphNodeData[] = [
     accent: "#2ec4b6",
     size: "md",
   },
+  {
+    id: "telemost",
+    label: "Телемост",
+    x: 340,
+    y: 410,
+    kind: "integration",
+    logoSrc: "/integrations/telemost.png",
+    logoAlt: "Яндекс Телемост",
+    size: "md",
+  },
 
   // Entities woven into left cluster
   {
@@ -277,6 +287,8 @@ export const graphEdges: GraphEdgeData[] = [
   { id: "meeting-comms", from: "meeting", to: "comms", kind: "local" },
   { id: "person-comms", from: "person", to: "comms", kind: "local" },
   { id: "person-meeting", from: "person", to: "meeting", kind: "local" },
+  { id: "telemost-comms", from: "telemost", to: "comms", kind: "local" },
+  { id: "meeting-telemost", from: "meeting", to: "telemost", kind: "local" },
   { id: "desk-iam", from: "desk", to: "iam", kind: "local" },
   { id: "document-knowledge", from: "document", to: "knowledge", kind: "local" },
   { id: "knowledge-courses", from: "knowledge", to: "courses", kind: "local" },
@@ -334,14 +346,14 @@ export const graphScenario: GraphScenarioStep[] = [
   // Communication: Участник → Встреча → Comms → AI → Knowledge
   {
     id: "comms-1",
-    edges: ["person-meeting", "meeting-comms", "person-comms"],
-    nodes: ["person", "meeting", "comms"],
+    edges: ["person-meeting", "meeting-telemost", "telemost-comms", "person-comms"],
+    nodes: ["person", "meeting", "telemost", "comms"],
     durationMs: 1800,
   },
   {
     id: "comms-2",
     edges: ["comms-ai", "knowledge-ai", "document-knowledge"],
-    nodes: ["comms", "ai", "knowledge", "document"],
+    nodes: ["comms", "ai", "knowledge", "document", "telemost"],
     durationMs: 2200,
   },
   {

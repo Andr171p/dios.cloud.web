@@ -35,6 +35,9 @@ const nextConfig: NextConfig = {
       {
         pathname: "/partners/**",
       },
+      {
+        pathname: "/integrations/**",
+      },
     ],
     remotePatterns: [
       {

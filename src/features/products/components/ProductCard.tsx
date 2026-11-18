@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import type { CSSProperties } from "react";
 
 import { ProductDemo } from "./ProductDemo";
 import type { ProductCardModel } from "../types";
@@ -32,9 +34,31 @@ export function ProductCard({ product, active = false }: Props) {
           </span>
         </div>
 
-        <h3 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-[var(--tracking-tight)] md:text-4xl">
-          {product.name}
-        </h3>
+        <div className="flex items-center gap-3.5 md:gap-4">
+          {product.markSrc ? (
+            <span
+              className="product-mark inline-flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-[1.05rem] md:size-[3.25rem]"
+              style={
+                {
+                  "--mark-accent": product.markAccent ?? product.accentColor,
+                } as CSSProperties
+              }
+              aria-hidden
+            >
+              <Image
+                src={product.markSrc}
+                alt=""
+                width={56}
+                height={56}
+                className="size-[78%] object-contain"
+              />
+            </span>
+          ) : null}
+
+          <h3 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-[var(--tracking-tight)] md:text-4xl">
+            {product.name}
+          </h3>
+        </div>
 
         <p className="mt-3 text-sm font-medium text-[var(--accent)]">{product.tagline}</p>
 
